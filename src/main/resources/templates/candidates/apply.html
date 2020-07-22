@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="~{/fragments/head}"></th:block>
+</head>
+<body>
+<header>
+    <th:block th:include="~{/fragments/navbar}"></th:block>
+</header>
+<div class="signup-form">
+    <form th:action="@{/candidates/apply}" method="post" enctype="multipart/form-data" th:object="${candidate}">
+        <h2>Apply</h2>
+        <p class="hint-text">Apply now and get a chance to be hired.</p>
+        <div class="form-group">
+            <input type="text" class="form-control" name="name" placeholder="Full name" required="required">
+        </div>
+<!--        <div class="form-group">-->
+<!--            <select class="form-group" name="category">-->
+<!--                <option value="">Select category</option>-->
+<!--                <option th:each="cat : ${T(projectdemo.model.entity.CategoryName).values()}"-->
+<!--                        th:value="${cat}" th:text="${cat}">Shirt</option>-->
+<!--            </select>-->
+<!--        </div>-->
+        <div class="form-group">
+            <label for="add-product-categories" class="font-weight-bold">Categories</label>
+            <select multiple="multiple" size="7" class="form-group" id="add-product-categories" name="category">
+                <option value="">--- Select Category ---</option>
+            </select>
+        </div>
+        <div class="form-group">
+           <textarea th:field="*{description}" name="description" rows="3" cols="50" placeholder="Describe yourself"></textarea>
+        </div>
+            <div class="form-group">
+                <input type="file" name="image" class="form-control"></input>
+            </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success btn-lg btn-block">Apply</button>
+        </div>
+    </form>
+</div>
+
+<footer>
+    <th:block th:include="~{/fragments/footer}"></th:block>
+</footer>
+<script>
+    fetch('/candidates/fetch')
+        .then((response) => response.json())
+        .then((json) => {
+            json.forEach((category) => {
+                let opt = document.createElement("option");
+                opt.value = category;
+                opt.innerHTML = category;
+                $('#add-product-categories').append(opt);
+            });
+        })
+        .catch((err) => console.log(err));
+</script>
+</body>
+</html>
+
