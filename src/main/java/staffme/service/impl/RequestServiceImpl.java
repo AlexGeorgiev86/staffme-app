@@ -38,7 +38,7 @@ public class RequestServiceImpl implements RequestService {
         return this.modelMapper.map(this.requestRepository.saveAndFlush(request), RequestServiceModel.class);
 
     }
-    @Scheduled(fixedRate = 86400000)
+    @Scheduled(fixedRate = 6000)
     @Override
     public void completeRequests() {
 
