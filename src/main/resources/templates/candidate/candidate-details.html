@@ -19,7 +19,7 @@
             <input type="text" class="form-control" name="name" th:value="${candidate.name}" required="required">
         </div>
         <div class="form-group">
-            <input type="number" class="form-control" name="cost" placeholder="enter cost" required="required">
+            <input type="number" class="form-control" name="cost" min="0" placeholder="enter cost" required="required">
         </div>
         <div class="form-group">
             <input type="text" class="form-control" name="categoryName" th:value="${candidate.categoryName}"  required="required">

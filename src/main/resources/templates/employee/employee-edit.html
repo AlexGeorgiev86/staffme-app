@@ -16,7 +16,7 @@
             <input type="text" name="name" th:value="${employee.name}">
         </div>
         <div class="form-group text-center">
-            <input type="number" name="cost" th:value="${employee.cost}">
+            <input type="number" name="cost" min="0" th:value="${employee.cost}">
         </div>
         <div class="form-group text-center">
             <textarea th:text="${employee.description}" name="description" rows="4" cols="50"></textarea>

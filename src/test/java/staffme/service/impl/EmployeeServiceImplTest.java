@@ -60,7 +60,7 @@ class EmployeeServiceImplTest {
         String id = "id";
 
         EmployeeServiceModel employeeServiceModel = new EmployeeServiceModel("Pesho", new BigDecimal(1),
-                "good","ïmg", categoryServiceModel, true);
+                "good", "ïmg", categoryServiceModel, true);
 
         List<Employee> fakeEmployeeRepository = new ArrayList<>();
 
@@ -71,8 +71,8 @@ class EmployeeServiceImplTest {
                 });
 
         Mockito.when(categoryService.findByName(employeeServiceModel
-                        .getCategory()
-                        .getCategoryName()))
+                .getCategory()
+                .getCategoryName()))
                 .thenReturn(categoryServiceModel);
 
         EmployeeServiceModel actual = employeeService.add(employeeServiceModel, id);
@@ -94,68 +94,47 @@ class EmployeeServiceImplTest {
         categoryServiceModel.setCategoryName(CategoryName.CHEF);
 
         Employee employee = new Employee("Pesho", new BigDecimal(1),
-                "good","ïmg", category, true);
+                "good", "ïmg", category, true);
         EmployeeServiceModel employeeServiceModel = new EmployeeServiceModel("Pesho", new BigDecimal(1),
-                "good","ïmg", categoryServiceModel, true);
+                "good", "ïmg", categoryServiceModel, true);
 
         List<Employee> employees = new ArrayList<>();
         employees.add(employee);
         List<EmployeeServiceModel> expected = new ArrayList<>();
         expected.add(employeeServiceModel);
 
-        Mockito.when(employeeRepository.findAll()).thenReturn(employees);
+        Mockito.when(categoryService.findByName(any(CategoryName.class))).thenReturn(categoryServiceModel);
+        Mockito.when(employeeRepository.findAllByCategory(any(Category.class))).thenReturn(employees);
 
-       List<EmployeeServiceModel> actual = employeeService.
-               findAllEmployeesWithCategory(category.getCategoryName().name());
+        List<EmployeeServiceModel> actual = employeeService.
+                findAllEmployeesWithCategory(category.getCategoryName().name());
 
-       assertEquals(expected.get(0).getAvailable(), actual.get(0).getAvailable());
-       assertEquals(expected.get(0).getCategory().getCategoryName().name(),
-               actual.get(0).getCategory().getCategoryName().name());
+        assertEquals(expected.get(0).getAvailable(), actual.get(0).getAvailable());
+        assertEquals(expected.get(0).getCategory().getCategoryName().name(),
+                actual.get(0).getCategory().getCategoryName().name());
     }
 
     @Test
     void findAllEmployeesWithCategoryShouldReturnEmptyList_WhenExistingCategoryIsPassedAndIsNotAvailable() {
         Category category = new Category();
         category.setCategoryName(CategoryName.CHEF);
+        CategoryServiceModel categoryServiceModel = new CategoryServiceModel();
+        category.setCategoryName(CategoryName.CHEF);
 
         Employee employee = new Employee("Pesho", new BigDecimal(1),
-                "good","ïmg", category, false);
+                "good", "ïmg", category, false);
 
         List<Employee> employees = new ArrayList<>();
         employees.add(employee);
-
-        Mockito.when(employeeRepository.findAll()).thenReturn(employees);
+        Mockito.when(categoryService.findByName(any(CategoryName.class))).thenReturn(categoryServiceModel);
+        Mockito.when(employeeRepository.findAllByCategory(any(Category.class))).thenReturn(employees);
 
         List<EmployeeServiceModel> actual = employeeService.
                 findAllEmployeesWithCategory(category.getCategoryName().name());
 
-        List<EmployeeServiceModel> expected = new ArrayList<>();
-
-        assertEquals(expected.size(), actual.size());
+        assertEquals(0, actual.size());
     }
 
-    @Test
-    void findAllEmployeesWithCategoryShouldReturnEmptyList_WhenCategoryIsNotExisting() {
-        Category category = new Category();
-        category.setCategoryName(CategoryName.CHEF);
-        Category categoryNotExisting = new Category();
-        categoryNotExisting.setCategoryName(CategoryName.HOST);
-
-        Employee employee = new Employee("Pesho", new BigDecimal(1),
-                "good","ïmg", category, true);
-
-        List<Employee> employees = new ArrayList<>();
-        employees.add(employee);
-
-        Mockito.when(employeeRepository.findAll()).thenReturn(employees);
-
-        List<EmployeeServiceModel> actual = employeeService.
-                findAllEmployeesWithCategory(categoryNotExisting.getCategoryName().name());
-
-        List<EmployeeServiceModel> expected = new ArrayList<>();
-
-        assertEquals(expected.size(), actual.size());
-    }
 
     @Test
     void findByIdShouldReturnCorrectData_WhenExistingIdIsPassed() {
@@ -165,9 +144,9 @@ class EmployeeServiceImplTest {
         categoryServiceModel.setCategoryName(CategoryName.CHEF);
 
         Employee employee = new Employee("Pesho", new BigDecimal(1),
-                "good","ïmg", category, true);
+                "good", "ïmg", category, true);
         EmployeeServiceModel expected = new EmployeeServiceModel("Pesho", new BigDecimal(1),
-                "good","ïmg", categoryServiceModel, true);
+                "good", "ïmg", categoryServiceModel, true);
 
         String id = "id";
 
@@ -231,7 +210,7 @@ class EmployeeServiceImplTest {
         category.setCategoryName(CategoryName.CHEF);
 
         Employee employee = new Employee("Pesho", new BigDecimal(1),
-                "good","ïmg", category, false);
+                "good", "ïmg", category, false);
 
         Mockito.when(employeeRepository.findById(id)).thenReturn(Optional.of(employee));
         Mockito.when(employeeRepository.saveAndFlush(any(Employee.class))).thenReturn(new Employee());

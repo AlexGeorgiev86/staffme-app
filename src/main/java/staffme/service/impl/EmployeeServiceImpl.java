@@ -3,6 +3,8 @@ package staffme.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import staffme.error.EmployeeNotFoundException;
+import staffme.model.entity.Category;
+import staffme.model.entity.CategoryName;
 import staffme.model.entity.Employee;
 import staffme.model.service.EmployeeServiceModel;
 import staffme.repository.EmployeeRepository;
@@ -49,10 +51,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeServiceModel> findAllEmployeesWithCategory(String category) {
-        return this.employeeRepository
-                .findAll()
+        Category cat = this.modelMapper.
+                map(this.categoryService.findByName(CategoryName.valueOf(category)), Category.class);
+        return this.employeeRepository.findAllByCategory(cat)
                 .stream()
-                .filter(employee -> employee.getCategory().getCategoryName().name().equals(category))
                 .filter(Employee::getAvailable)
                 .map(e -> this.modelMapper.map(e, EmployeeServiceModel.class))
                 .collect(Collectors.toList());
